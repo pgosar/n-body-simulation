@@ -1,6 +1,11 @@
 .o
 x64/
 .vs/
+libs/
+include/
 *.out
 *.exe
-
+*.sln
+*.vcxproj
+n-body-simulation.vcxproj.filters
+n-body-simulation.vcxproj.user
