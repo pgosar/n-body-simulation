@@ -1,7 +1,8 @@
-#include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/mat2x2.hpp>
 #include "src/header/linmath.h"
 
 int main(void) {
