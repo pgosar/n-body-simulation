@@ -1,6 +1,8 @@
 .o
 x64/
 .vs/
+.history/
+.vscode/
 libs/
 include/
 *.out
@@ -9,3 +11,4 @@ include/
 *.vcxproj
 n-body-simulation.vcxproj.filters
 n-body-simulation.vcxproj.user
+.Identifier

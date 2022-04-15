@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/mat2x2.hpp>
-#include "src/header/linmath.h"
+#include "src/header/main.h"
 
 int main(void) {
   if (!glfwInit()) {
@@ -65,12 +60,6 @@ int main(void) {
         ballDown = true;
       }
     }
-    // Color
-    r = fmod(r + 0.01, 1);
-    g = fmod(g + 0.02, 1);
-    b = fmod(b + 0.03, 1);
-    // Drawing
-    glColor3f(r, g, b);
     glBegin(GL_POLYGON);
     for (int i = 0; i < 360; i++) {
       float degInRad = i * DEG2RAD;
