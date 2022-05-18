@@ -55,11 +55,17 @@ int main(void) {
       }
     } else {
       if (y < 1 - radius) {
-        y += speed;
+        y += speed * 2;
       } else {
         ballDown = true;
       }
     }
+    // Color
+    r = fmod(r + 0.01, 1);
+    g = fmod(g + 0.02, 1);
+    b = fmod(b + 0.03, 1);
+    // Drawing
+    glColor3f(r, g, b);
     glBegin(GL_POLYGON);
     for (int i = 0; i < 360; i++) {
       float degInRad = i * DEG2RAD;
