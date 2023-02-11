@@ -1,3 +1,5 @@
+use nbody::run;
+
 fn main() {
-    println!("hello");
+    run();
 }
