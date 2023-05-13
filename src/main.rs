@@ -1,5 +1,5 @@
 use nbody::run;
 
 fn main() {
-    run();
+    pollster::block_on(run());
 }
