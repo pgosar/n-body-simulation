@@ -1,6 +1,5 @@
 use std::iter;
 
-use wgpu::BindGroup;
 use wgpu::util::DeviceExt;
 use cgmath::prelude::*;
 

@@ -2,8 +2,12 @@
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct Vertex {
     position: [f32; 3],
-    color: [f32; 3],
+    color: cgmath::Vector3<{f32}>,
 }
+
+pub const BLUE:[f32; 3] = cgmath::vec3(0.722, 0.22, 0.231);
+
+pub const _RED: [f32; 3] = [0.44, 0.0,  0.22];
 
 impl Vertex {
     pub fn desc() -> wgpu::VertexBufferLayout<'static> {
@@ -30,15 +34,15 @@ impl Vertex {
 pub const VERTICES: &[Vertex] = &[
     Vertex {
         position: [0.25, 0.0, 0.0],
-        color: [0.0, 0.0, 0.0],
+        color: BLUE,
     }, // A
     Vertex {
         position: [0.0, 0.25, 0.0],
-        color: [0.0, 0.0, 0.0],
+        color: BLUE,
     }, // B
     Vertex {
         position: [0.0, -0.25, 0.0],
-        color: [0.0, 0.0, 0.0],
+        color: BLUE,
     }, // C
 ];
 pub const INDICES: &[u16] = &[0, 1, 2, /* padding */ 0];
