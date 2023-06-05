@@ -2,7 +2,7 @@
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct Vertex {
     position: [f32; 3],
-    tex_coords: [f32; 2],
+    color: [f32; 3],
 }
 
 impl Vertex {
@@ -30,15 +30,15 @@ impl Vertex {
 pub const VERTICES: &[Vertex] = &[
     Vertex {
         position: [0.25, 0.0, 0.0],
-        tex_coords: [0.0, 0.0],
+        color: [0.0, 0.0, 0.0],
     }, // A
     Vertex {
         position: [0.0, 0.25, 0.0],
-        tex_coords: [1.0, 0.0],
+        color: [0.0, 0.0, 0.0],
     }, // B
     Vertex {
         position: [0.0, -0.25, 0.0],
-        tex_coords: [0.0, 1.0],
+        color: [0.0, 0.0, 0.0],
     }, // C
 ];
 pub const INDICES: &[u16] = &[0, 1, 2, /* padding */ 0];
