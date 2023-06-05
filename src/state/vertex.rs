@@ -2,10 +2,10 @@
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct Vertex {
     position: [f32; 3],
-    color: cgmath::Vector3<{f32}>,
+    color: [f32; 3],
 }
 
-pub const BLUE:[f32; 3] = cgmath::vec3(0.722, 0.22, 0.231);
+pub const BLUE:[f32; 3] = [0.0, 0.0, 0.44];
 
 pub const _RED: [f32; 3] = [0.44, 0.0,  0.22];
 
