@@ -1,6 +1,14 @@
-making an efficient n body simulation in Rust, most likely with the fast multipole
-multiply method. 
+An efficient nbody simulation using the fast multipole method (FMM) that simulates two or more galaxy collisions
 
-1. naive n^2 implementation
-2. fast multipole multiply
-3. optimizations
+Current progress:
+- Naive n^2 algorithm
+- Camera
+- Controls
+- Colors
+
+TODO:
+- FMM
+- Smooth particle hydrodynamics
+- More realistic simulation (dark matter, etc.)
+- Parallelization with Cuda
+- Performance min/maxxing
