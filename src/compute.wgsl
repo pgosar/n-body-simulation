@@ -36,7 +36,7 @@ fn length2(v : vec3<f32>) -> f32 {
 @workgroup_size(256)
 fn main(@builtin(global_invocation_id) global_invocation_id: vec3<u32>) {
     let i: u32 = global_invocation_id.x;
-    let G: f32 = f32(0.000001);
+    let G: f32 = f32(6.6e-31);
 
     if (dataOld.old[i].mass < f32(0.0)) {
         return;

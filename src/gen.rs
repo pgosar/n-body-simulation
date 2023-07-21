@@ -4,8 +4,8 @@ use {
         prelude::*,
         {Point3, Vector3},
     },
-    // rand::{thread_rng, Rng},
     rand::prelude::*,
+    rand_distr::Normal,
     std::f32::consts::PI,
 };
 
@@ -28,13 +28,13 @@ pub fn create(
     let movement: Vector3<f32> = particle_vectors.cross(normal).normalize();
     // pos = center + offset * radius
     let pos: Point3<f32> = center_pos + particle_vectors * radius;
-    let gravity: f32 = 0.00001;
+    let gravity: f32 = 6.6e-31;
     // gravitational acceleration formula
     let speed: f32 = (gravity * center_mass * radius as f32
         / ((radius * radius) as f32 + calibrate))
         .sqrt() as f32;
     // V' = V+g, g = gravitational acceleration * vector of movement
-    let vel = center_vel + movement * speed;
+    let vel: Vector3<f32> = center_vel + movement * speed;
     particles.push(Particle::new(pos.into(), vel.into(), 0.0, calibrate));
 }
 
@@ -47,9 +47,24 @@ pub fn formation(
     center_mass: f32,
     normal: Vector3<f32>,
 ) {
-    for _ in 0..amount / 7 {
-        let radius = 50.0 + thread_rng().gen_range(0.0..100.0);
-        let angle = thread_rng().gen::<f32>() * 2.0 * PI;
+    for _ in 0..amount / 10 {
+        let radius: f32 = 5e-11 + thread_rng().gen_range(0.0..1e-13);
+        let angle: f32 = thread_rng().gen::<f32>() * 2.0 * PI;
+        create(
+            angle,
+            normal.normalize(),
+            particles,
+            calibrate,
+            center_pos,
+            center_vel,
+            center_mass,
+            radius,
+        );
+    }
+    // makes arms look more realistic
+    for _ in 0..amount / 10 {
+        let radius: f32 = 5e-11 + thread_rng().gen_range(0.0..8e-10);
+        let angle: f32 = thread_rng().gen::<f32>() * 2.0 * PI;
         create(
             angle,
             normal.normalize(),
@@ -62,16 +77,16 @@ pub fn formation(
         );
     }
     // based on number of stars in the arms vs center of Milky Way (80%)
-    for _ in 0..amount/7*6 {
-        let arms = 2;
-        let radius = 50.0 + thread_rng().gen_range(0.0..100.0);
+    for _ in 0..amount / 5 * 4 {
+        let arms: i32 = 2;
+        let radius: f32 = 7e-11 + thread_rng().gen_range(0.0..1e-9);
         // θ = (2π / N) * A + f(r), N=total arms, A=arm number`
         // f(r) is a function that includes variation in the number
-        // arm number
-        let arm = thread_rng().gen_range(0..arms);
-        let angle = (arm as f32 / (arms as f32) * 2.0 * PI) - (radius * 0.01)
-            + thread_rng().gen_range(0.0..0.2);
-        //let angle = (2.0 * PI / arms as f32) * arm as f32 + thread_rng().gen_range(-0.05..=0.15);
+        let arm: i32 = thread_rng().gen_range(0..arms);
+        let angle: f32 = (arm as f32 / (arms as f32) * 2.0 * PI) - (radius * 7e9)
+            + (Normal::new(0.0, PI / 8.0)
+                .unwrap()
+                .sample(&mut thread_rng()));
         create(
             angle,
             normal.normalize(),

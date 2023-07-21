@@ -8,7 +8,7 @@ use {
     serde::{Deserialize, Serialize},
 };
 
-const CALIBRATE: f32 = 5e17;
+const CALIBRATE: f32 = 1e-1;
 
 #[derive(Clone, Copy, Debug, bytemuck::Pod, bytemuck::Zeroable, Serialize, Deserialize)]
 #[repr(C)]
@@ -62,7 +62,7 @@ impl Particle {
 }
 
 pub fn init_galaxy(calibrate: f32, galaxies: Vec<Galaxy>) -> Vec<Particle> {
-    let mut particles = Vec::new();
+    let mut particles: Vec<Particle> = Vec::new();
     for c in &galaxies {
         particles.push(match c {
             Galaxy::Particle { pos, vel, mass } => {
@@ -108,26 +108,26 @@ pub fn init_galaxy(calibrate: f32, galaxies: Vec<Galaxy>) -> Vec<Particle> {
 fn main() {
     let galaxies: Vec<Galaxy> = vec![
         Galaxy::Init {
-            center_pos: [-2000.0, -2000.0, 0.0],
-            center_vel: [0.0, 0.0, 0.0],
-            center_mass: 7e20,
+            center_pos: [-2e-9, -2e-9, 0.0],
+            center_vel: [1e-14, 0.0, 0.0],
+            center_mass: 1e14,
             amount: 100000,
             normal: [1.0, 0.0, 0.0],
         },
         Galaxy::Init {
-            center_pos: [2000.0, 2000.0, 0.0],
-            center_vel: [0.05, 0.0, 0.0],
-            center_mass: 3e20,
+            center_pos: [2e-9, 2e-9, 0.0],
+            center_vel: [0.0, 0.0, 0.0],
+            center_mass: 4e14,
             amount: 100000,
-            normal: [0.0, 1.0, 0.0],
+            normal: [1.0, 1.0, 0.0],
         },
     ];
 
-    let particles = init_galaxy(CALIBRATE, galaxies);
-    let gpu_info = GpuInfo {
+    let particles: Vec<Particle> = init_galaxy(CALIBRATE, galaxies);
+    let gpu_info: GpuInfo = GpuInfo {
         matrix: Matrix4::from_translation(Vector3::new(0.0, 0.0, 0.0)).into(),
         particles: particles.len() as u32,
-        motion: 4.0,
+        motion: 6.0,
         _pad1: [0.0; 2],
     };
     pollster::block_on(render::run(gpu_info, particles));
