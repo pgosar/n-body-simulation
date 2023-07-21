@@ -117,7 +117,7 @@ fn main() {
         Galaxy::Init {
             center_pos: [2e-9, 2e-9, 0.0],
             center_vel: [0.0, 0.0, 0.0],
-            center_mass: 4e14,
+            center_mass: 3e14,
             amount: 10000,
             normal: [1.0, 1.0, 0.0],
         },

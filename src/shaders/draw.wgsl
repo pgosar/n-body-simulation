@@ -44,9 +44,9 @@ fn vs_main(input: VertexIn) -> VertexOut {
         output.fragColor = vec3<f32>(0.0, 0.0, 0.0);
     } else {
         if (i < i32(gpu_info.particles) / 2 + 1) {
-            output.fragColor = vec3<f32>(1.0, 0.5, 0.67);
+            output.fragColor = vec3<f32>(0.773, 0.651, 0.847);
         } else {
-            output.fragColor = vec3<f32>(0.4, 0.5, 1.0);
+            output.fragColor = vec3<f32>(0.325, 0.282, 0.498);
         }
     }
     return output;
