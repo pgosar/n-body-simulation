@@ -38,11 +38,6 @@ fn main(@builtin(global_invocation_id) global_invocation_id: vec3<u32>) {
     let i: u32 = global_invocation_id.x;
     let G: f32 = f32(6.6e-31);
 
-    if (dataOld.old[i].mass < f32(0.0)) {
-        return;
-    }
-
-    // Gravity
     if (gpu_info.motion > 0.0) {
         var temp : vec3<f32> = vec3<f32>(0.0, 0.0, 0.0);
         for (var j : u32 = 0u; j < u32(gpu_info.particles); j = j + 1u) {

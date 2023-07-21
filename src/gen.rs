@@ -35,7 +35,8 @@ pub fn create(
         .sqrt() as f32;
     // V' = V+g, g = gravitational acceleration * vector of movement
     let vel: Vector3<f32> = center_vel + movement * speed;
-    particles.push(Particle::new(pos.into(), vel.into(), 0.0, calibrate));
+    let mass: f32 = 1e8;
+    particles.push(Particle::new(pos.into(), vel.into(), mass, calibrate));
 }
 
 pub fn formation(

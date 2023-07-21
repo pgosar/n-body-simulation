@@ -111,14 +111,14 @@ fn main() {
             center_pos: [-2e-9, -2e-9, 0.0],
             center_vel: [1e-14, 0.0, 0.0],
             center_mass: 1e14,
-            amount: 100000,
+            amount: 10000,
             normal: [1.0, 0.0, 0.0],
         },
         Galaxy::Init {
             center_pos: [2e-9, 2e-9, 0.0],
             center_vel: [0.0, 0.0, 0.0],
             center_mass: 4e14,
-            amount: 100000,
+            amount: 10000,
             normal: [1.0, 1.0, 0.0],
         },
     ];
@@ -127,7 +127,7 @@ fn main() {
     let gpu_info: GpuInfo = GpuInfo {
         matrix: Matrix4::from_translation(Vector3::new(0.0, 0.0, 0.0)).into(),
         particles: particles.len() as u32,
-        motion: 6.0,
+        motion: 2.0,
         _pad1: [0.0; 2],
     };
     pollster::block_on(render::run(gpu_info, particles));
