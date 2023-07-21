@@ -1,3 +1,4 @@
+
 struct Particle {
     pos : vec3<f32>,
     _pad1 : f32,
@@ -49,4 +50,9 @@ fn vs_main(input: VertexIn) -> VertexOut {
         }
     }
     return output;
+}
+
+@fragment
+fn fs_main(in: VertexOut) -> @location(0) vec4<f32> {
+  return vec4(in.fragColor, 1.0);
 }

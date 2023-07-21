@@ -35,32 +35,38 @@ impl State {
             .ok()
             .unwrap();
         let display: Display = Display::new(window).await.unwrap();
-        let cs_mod: wgpu::ShaderModule = display
-            .device
-            .create_shader_module(wgpu::ShaderModuleDescriptor {
-                label: Some("Compute Shader"),
-                source: wgpu::ShaderSource::Wgsl(include_str!("../compute.wgsl").into()),
-            });
-        let vs_mod: wgpu::ShaderModule = display
-            .device
-            .create_shader_module(wgpu::ShaderModuleDescriptor {
-                label: Some("Vertex Shader"),
-                source: wgpu::ShaderSource::Wgsl(include_str!("../vertex.wgsl").into()),
-            });
-        let fs_mod: wgpu::ShaderModule = display
-            .device
-            .create_shader_module(wgpu::ShaderModuleDescriptor {
-                label: Some("Fragment Shader"),
-                source: wgpu::ShaderSource::Wgsl(include_str!("../fragment.wgsl").into()),
-            });
+        let cs_mod: wgpu::ShaderModule =
+            display
+                .device
+                .create_shader_module(wgpu::ShaderModuleDescriptor {
+                    label: Some("Compute Shader"),
+                    source: wgpu::ShaderSource::Wgsl(
+                        include_str!("../shaders/compute.wgsl").into(),
+                    ),
+                });
+        let vs_mod: wgpu::ShaderModule =
+            display
+                .device
+                .create_shader_module(wgpu::ShaderModuleDescriptor {
+                    label: Some("Vertex Shader"),
+                    source: wgpu::ShaderSource::Wgsl(include_str!("../shaders/draw.wgsl").into()),
+                });
+        let fs_mod: wgpu::ShaderModule =
+            display
+                .device
+                .create_shader_module(wgpu::ShaderModuleDescriptor {
+                    label: Some("Fragment Shader"),
+                    source: wgpu::ShaderSource::Wgsl(include_str!("../shaders/draw.wgsl").into()),
+                });
 
-        let gpu_buffer: wgpu::Buffer = display
-            .device
-            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                label: Some("GpuInfo Buffer"),
-                contents: bytemuck::cast_slice(&[gpu_info]),
-                usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
-            });
+        let gpu_buffer: wgpu::Buffer =
+            display
+                .device
+                .create_buffer_init(&wgpu::util::BufferInitDescriptor {
+                    label: Some("GpuInfo Buffer"),
+                    contents: bytemuck::cast_slice(&[gpu_info]),
+                    usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+                });
 
         let mut init_particle: Vec<f32> = vec![0.0f32; (particles.len() * 12) as usize];
         let mut i: usize = 0;
@@ -87,13 +93,14 @@ impl State {
             label: Some("Old Buffer"),
             mapped_at_creation: false,
         });
-        let cur_init: wgpu::Buffer = display
-            .device
-            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                label: Some("Current Buffer Initializer"),
-                contents: bytemuck::cast_slice(&init_particle),
-                usage: wgpu::BufferUsages::COPY_SRC,
-            });
+        let cur_init: wgpu::Buffer =
+            display
+                .device
+                .create_buffer_init(&wgpu::util::BufferInitDescriptor {
+                    label: Some("Current Buffer Initializer"),
+                    contents: bytemuck::cast_slice(&init_particle),
+                    usage: wgpu::BufferUsages::COPY_SRC,
+                });
         let cur: wgpu::Buffer = display.device.create_buffer(&wgpu::BufferDescriptor {
             size: p_size,
             usage: wgpu::BufferUsages::COPY_SRC
@@ -102,21 +109,23 @@ impl State {
             label: Some("Current Buffer"),
             mapped_at_creation: false,
         });
-        let depth_texture: wgpu::Texture = display.device.create_texture(&wgpu::TextureDescriptor {
-            label: Some("Depth Texture"),
-            size: wgpu::Extent3d {
-                width: display.config.width,
-                height: display.config.height,
-                depth_or_array_layers: 1,
-            },
-            mip_level_count: 1,
-            sample_count: 1,
-            dimension: wgpu::TextureDimension::D2,
-            format: wgpu::TextureFormat::Depth32Float,
-            view_formats: &[],
-            usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
-        });
-        let depth_view: wgpu::TextureView = depth_texture.create_view(&wgpu::TextureViewDescriptor::default());
+        let depth_texture: wgpu::Texture =
+            display.device.create_texture(&wgpu::TextureDescriptor {
+                label: Some("Depth Texture"),
+                size: wgpu::Extent3d {
+                    width: display.config.width,
+                    height: display.config.height,
+                    depth_or_array_layers: 1,
+                },
+                mip_level_count: 1,
+                sample_count: 1,
+                dimension: wgpu::TextureDimension::D2,
+                format: wgpu::TextureFormat::Depth32Float,
+                view_formats: &[],
+                usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+            });
+        let depth_view: wgpu::TextureView =
+            depth_texture.create_view(&wgpu::TextureViewDescriptor::default());
 
         let bind_group_layout: wgpu::BindGroupLayout =
             display
@@ -162,26 +171,27 @@ impl State {
                         },
                     ],
                 });
-        let bind_group: wgpu::BindGroup = display
-            .device
-            .create_bind_group(&wgpu::BindGroupDescriptor {
-                label: Some("Bind Group"),
-                layout: &bind_group_layout,
-                entries: &[
-                    wgpu::BindGroupEntry {
-                        binding: 0,
-                        resource: gpu_buffer.as_entire_binding(),
-                    },
-                    wgpu::BindGroupEntry {
-                        binding: 1,
-                        resource: prev.as_entire_binding(),
-                    },
-                    wgpu::BindGroupEntry {
-                        binding: 2,
-                        resource: cur.as_entire_binding(),
-                    },
-                ],
-            });
+        let bind_group: wgpu::BindGroup =
+            display
+                .device
+                .create_bind_group(&wgpu::BindGroupDescriptor {
+                    label: Some("Bind Group"),
+                    layout: &bind_group_layout,
+                    entries: &[
+                        wgpu::BindGroupEntry {
+                            binding: 0,
+                            resource: gpu_buffer.as_entire_binding(),
+                        },
+                        wgpu::BindGroupEntry {
+                            binding: 1,
+                            resource: prev.as_entire_binding(),
+                        },
+                        wgpu::BindGroupEntry {
+                            binding: 2,
+                            resource: cur.as_entire_binding(),
+                        },
+                    ],
+                });
         let pipeline_layout: wgpu::PipelineLayout =
             display
                 .device
