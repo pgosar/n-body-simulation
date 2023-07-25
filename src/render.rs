@@ -21,7 +21,7 @@ pub async fn run(mut gpu_info: GpuInfo, particles: Vec<Particle>) {
     let mut state: State = State::new(gpu_info, particles).await;
     let n: usize = state.particles.len();
     let p_size: u64 = (n * std::mem::size_of::<Particle>()) as u64;
-    let workgroups: u32 = (n / 256) as u32;
+    let workgroups: u32 = ((n + 255 as usize) / 256 as usize) as u32;
 
     let mut cam: Vector3<f32> = Vector3::new(
         -state.display.camera_pos[0],
@@ -218,7 +218,7 @@ pub async fn run(mut gpu_info: GpuInfo, particles: Vec<Particle>) {
                     });
                     cpass.set_pipeline(&state.comp_pipeline);
                     cpass.set_bind_group(0, &state.bind_group, &[]);
-                    cpass.dispatch_workgroups(workgroups, 1, 1);
+                    cpass.dispatch_workgroups(workgroups+1, 1, 1);
                 }
                 {
                     let mut rpass: wgpu::RenderPass<'_> = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
