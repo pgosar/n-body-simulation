@@ -1,21 +1,12 @@
 use wgpu::{util::DeviceExt, SurfaceTexture};
 use {
-    crate::{GpuInfo, Particle},
-    cgmath::{prelude::*, Matrix4, PerspectiveFov, Point3, Quaternion, Rad, Vector3},
-    std::{collections::HashSet, f32::consts::PI, time::Instant},
+    crate::{GpuInfo, Particle, build_matrix},
+    cgmath::{prelude::*, Point3, Quaternion, Rad, Vector3},
+    std::{collections::HashSet, time::Instant},
     winit::{event, event_loop::ControlFlow},
 };
 pub mod state;
 use state::State;
-
-fn build_matrix(pos: Point3<f32>, dir: Vector3<f32>, aspect: f32) -> Matrix4<f32> {
-    Matrix4::from(PerspectiveFov {
-        fovy: Rad(PI / 2.0),
-        aspect,
-        near: 1E-10,
-        far: 1E7,
-    }) * Matrix4::look_to_rh(pos, dir, Vector3::new(0.0, 1.0, 0.0))
-}
 
 pub async fn run(mut gpu_info: GpuInfo, particles: Vec<Particle>) {
     let mut state: State = State::new(gpu_info, particles).await;

@@ -1,11 +1,16 @@
 #![deny(nonstandard_style, unused)]
 
+use rand::Rng;
+
 mod gen;
 mod render;
+mod headless;
 
 use {
-    cgmath::{Matrix4, Vector3},
+    cgmath::{Matrix4, Vector3, Point3, PerspectiveFov, Rad},
     serde::{Deserialize, Serialize},
+    std::f32::consts::PI,
+    rand::SeedableRng,
 };
 
 const CALIBRATE: f32 = 1e-1;
@@ -59,6 +64,15 @@ impl Particle {
             _pad3: [0.0; 2],
         }
     }
+}
+
+fn build_matrix(pos: Point3<f32>, dir: Vector3<f32>, aspect: f32) -> Matrix4<f32> {
+    Matrix4::from(PerspectiveFov {
+        fovy: Rad(PI / 2.0),
+        aspect,
+        near: 1E-10,
+        far: 1E7,
+    }) * Matrix4::look_to_rh(pos, dir, Vector3::new(0.0, 1.0, 0.0))
 }
 
 pub fn init_galaxy(calibrate: f32, galaxies: Vec<Galaxy>) -> Vec<Particle> {
@@ -117,7 +131,7 @@ fn main() {
         Galaxy::Init {
             center_pos: [2e-9, 2e-9, 0.0],
             center_vel: [0.0, 0.0, 0.0],
-            center_mass: 3e14,
+            center_mass: 4e14,
             amount: 10000,
             normal: [1.0, 1.0, 0.0],
         },
@@ -130,5 +144,22 @@ fn main() {
         motion: 2.0,
         _pad1: [0.0; 2],
     };
-    pollster::block_on(render::run(gpu_info, particles));
+
+    let render: bool = false;
+    if render {
+        pollster::block_on(render::run(gpu_info, particles));
+    } else {
+        let mut rng = rand::rngs::StdRng::seed_from_u64(0);
+        let mut indexes: Vec<usize> = Vec::new();
+        indexes.push(0);
+        indexes.push(1);
+        for _ in 0..4 {
+            let index: usize = rng.gen_range(2..particles.len()/2);
+            let index2: usize = rng.gen_range(2..particles.len()/2) + particles.len()/2;
+            indexes.push(index);
+            indexes.push(index2);
+        }
+
+        pollster::block_on(headless::run(gpu_info, particles, indexes));        
+    }
 }
